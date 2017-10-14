@@ -15,7 +15,8 @@
     "${dependencies}/vertx-grpc",
     "${dependencies}/protobuf-java",
     "${dependencies}/protobuf-java-util",
-    "${dependencies}/instrumentation-api"
+    "${dependencies}/instrumentation-api",
+    "${dependencies}/opencensus-api"
   ],
 
   "executions": {
