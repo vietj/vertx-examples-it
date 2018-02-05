@@ -16,7 +16,8 @@
     "${dependencies}/protobuf-java",
     "${dependencies}/protobuf-java-util",
     "${dependencies}/instrumentation-api",
-    "${dependencies}/opencensus-api"
+    "${dependencies}/opencensus-api",
+    "${dependencies}/opencensus-contrib-grpc-metrics"
   ],
 
   "executions": {
