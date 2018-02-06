@@ -1,5 +1,6 @@
 ## Notes
 
 ```
-mvn -Pstaging --fail-never verify
+mvn clean install -Pprepare -P!it
+mvn clean install --fail-never -U -Pstaging
 ```
