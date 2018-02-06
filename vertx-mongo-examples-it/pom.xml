@@ -162,6 +162,7 @@
               <goal>start</goal>
             </goals>
             <configuration>
+              <version>2.6.12</version>
               <databaseDirectory>${project.build.directory}/mongo</databaseDirectory>
               <logging>file</logging>
               <logFile>${project.build.directory}/mongo.log</logFile>
