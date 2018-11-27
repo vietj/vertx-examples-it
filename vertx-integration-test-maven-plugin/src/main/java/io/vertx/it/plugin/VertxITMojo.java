@@ -17,10 +17,13 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
+import org.apache.maven.surefire.suite.RunResult;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
+import static org.apache.maven.plugin.failsafe.util.FailsafeSummaryXmlUtils.writeSummary;
 
 @Mojo(name = "run-it", threadSafe = false,
     requiresDependencyResolution = ResolutionScope.COMPILE,
@@ -86,6 +89,11 @@ public class VertxITMojo extends AbstractMojo {
    */
   @Parameter(defaultValue = "${java.home}", required = true, readonly = true)
   public File javaHome;
+
+  /**
+   * The summary file to write integration test results to.
+   */  @Parameter( defaultValue = "${project.build.directory}/failsafe-reports/failsafe-summary.xml", required = true )
+  private File summaryFile;
 
   private Set<Run> runs = new LinkedHashSet<>();
   private ExecutionSelector selector;
@@ -231,8 +239,18 @@ public class VertxITMojo extends AbstractMojo {
       throw new MojoExecutionException("Cannot create global report", e);
     }
 
-    if (getNumberOfFailedExecution() > 0 || getNumberOfExecutionInError() > 0) {
-      throw new MojoFailureException("Some executions has failed or are in error");
+    // Write summary file for failSafe verify goal
+    if ( !summaryFile.getParentFile().isDirectory() ) {
+      summaryFile.getParentFile().mkdirs();
+    }
+    try {
+      writeSummary(new RunResult(
+          getNumberOfExecutions(),
+          getNumberOfExecutionInError(),
+          getNumberOfFailedExecution(),
+          getAllExecutions().size() - getNumberOfExecutions()), summaryFile, false);
+    } catch (Exception e) {
+      throw new MojoExecutionException(e.getMessage(), e);
     }
   }
 
