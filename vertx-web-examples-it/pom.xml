@@ -264,25 +264,37 @@
       </plugin>
 
       <plugin>
-        <groupId>com.syncleus.maven.plugins</groupId>
-        <artifactId>maven-mongodb-plugin</artifactId>
-        <version>1.1.1</version>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>0.27.2</version>
         <executions>
           <execution>
-            <id>start</id>
+            <id>start-mongo</id>
+            <phase>pre-integration-test</phase>
             <goals>
               <goal>start</goal>
             </goals>
             <configuration>
-              <version>2.6.12</version>
-              <databaseDirectory>${project.build.directory}/mongo</databaseDirectory>
-              <logging>file</logging>
-              <logFile>${project.build.directory}/mongo.log</logFile>
-              <logFileEncoding>utf-8</logFileEncoding>
+              <images>
+                <image>
+                  <name>mongo:3.6</name>
+                  <alias>mongo</alias>
+                  <run>
+                    <ports>
+                      <port>27017:27017</port>
+                    </ports>
+                    <wait>
+                      <log>waiting for connections on port</log>
+                      <time>60000</time>
+                    </wait>
+                  </run>
+                </image>
+              </images>
             </configuration>
           </execution>
           <execution>
-            <id>stop</id>
+            <id>stop-mongo</id>
+            <phase>post-integration-test</phase>
             <goals>
               <goal>stop</goal>
             </goals>
